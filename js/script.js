@@ -60,7 +60,19 @@
         year: 2022,
         cover: '',
         links: [ { label: 'Demo', href: '#' } ]
-      }
+      },
+        {
+        id: 'p5',
+        title: 'Thematic analysis',
+        description: 'Zorg georiënteerde Thematische analyse',
+        category: 'Tooling',
+        tech: ['Node'],
+        tags: ['cli', 'scaffold'],
+        stars: 22,
+        year: 2023,
+        cover: 'images/thematicpic',
+        links: [ { label: 'GITHUB', href: 'https://jenshoutje.github.io/vragenlijst-triple-C/thematic-analysis.html' } ]
+      },
     ];
 
     // --- Rendering ---
