@@ -100,7 +100,7 @@
               : b.year - a.year);
 
       statCount.textContent = String(list.length);
-      statStars.textContent = String(list.reduce((s,p)=>s+p.stars,0));
+     
       statYear.textContent = String(Math.min(...PROJECTS.map(p=>p.year)) || new Date().getFullYear());
 
       grid.innerHTML = list.map(p => `
