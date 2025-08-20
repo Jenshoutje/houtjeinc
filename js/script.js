@@ -112,7 +112,7 @@
             <div class="tags">${[p.category, ...p.tech, ...p.tags].slice(0,6).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
           </div>
           <div class="card-footer">
-            <span aria-label="Sterren">⭐ ${p.stars}</span>
+          
             <a class="link" href="#" data-open="${p.id}">Bekijk</a>
           </div>
         </article>
