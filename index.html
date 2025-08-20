@@ -1,75 +1,407 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mijn Online Hub – Portfolio & Inkomsten</title>
-  <link rel="stylesheet" href="index.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio • Code Projecten</title>
+  <meta name="description" content="Een modern, strak en uitbreidbaar portfolio voor codeerprojecten." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0c0f;           /* donker thema als default */
+      --panel: #111317;
+      --muted: #a3a3a3;
+      --text: #e9e9e9;
+      --brand: #7c5cff;
+      --brand-2: #2dd4bf;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --ring: 0 0 0 3px rgba(124, 92, 255, 0.35);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --grid-gap: clamp(14px, 2vw, 20px);
+    }
+    /* Light mode tokens */
+    .theme-light {
+      --bg: #f7f7fb;
+      --panel: #ffffff;
+      --muted: #4b5563;
+      --text: #0f172a;
+      --shadow: 0 10px 24px rgba(2, 6, 23, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.06), transparent 60%),
+                  radial-gradient(900px 500px at 20% -10%, rgba(45,212,191,.06), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font: inherit; color: inherit; }
+
+    .container { width: min(1100px, 92vw); margin: 0 auto; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: saturate(160%) blur(10px);
+      background: color-mix(in oklab, var(--bg) 86%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--text) 12%, transparent);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .2px; }
+    .logo {
+      width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-weight: 700;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: var(--shadow);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--text) 14%, transparent);
+      background: color-mix(in oklab, var(--panel) 86%, transparent);
+      transition: transform .1s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border: none; }
+
+    /* Hero */
+    .hero { padding: clamp(26px, 3vw, 42px) 0; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: var(--grid-gap); align-items: center; }
+    .hero h1 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 6px; letter-spacing: -.5px; }
+    .hero p { margin: 0 0 16px; color: var(--muted); }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip { font-size: 13px; padding: 6px 10px; border-radius: 999px; background: color-mix(in oklab, var(--panel) 86%, transparent);
+      border: 1px solid color-mix(in oklab, var(--text) 10%, transparent) }
+
+    .hero-card { background: var(--panel); border: 1px solid color-mix(in oklab, var(--text) 12%, transparent);
+      border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+    .stat { background: color-mix(in oklab, var(--panel) 86%, transparent); border-radius: 14px; padding: 16px; border: 1px solid color-mix(in oklab, var(--text) 10%, transparent); }
+    .stat b { font-size: 20px; display: block; }
+
+    /* Controls */
+    .controls { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 18px 0; }
+    .field { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--panel);
+      border: 1px solid color-mix(in oklab, var(--text) 12%, transparent); }
+    .field input, .field select { width: 100%; background: transparent; border: none; outline: none; color: var(--text); }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
+    .col-12 { grid-column: span 12; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-3 { grid-column: span 3; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      .col-6 { grid-column: span 12; }
+      .col-4 { grid-column: span 12; }
+      .col-3 { grid-column: span 6; }
+    }
+
+    /* Card */
+    .card {
+      background: var(--panel); border-radius: var(--radius);
+      border: 1px solid color-mix(in oklab, var(--text) 12%, transparent);
+      overflow: hidden; box-shadow: var(--shadow);
+      display: grid; grid-template-rows: auto 1fr auto;
+    }
+    .thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, color-mix(in oklab, var(--brand) 60%, #000), color-mix(in oklab, var(--brand-2) 60%, #000)); display: grid; place-items: center; color: white; font-weight: 700; letter-spacing: .5px; }
+    .card-body { padding: 16px; display: grid; gap: 10px; }
+    .card h3 { margin: 0; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 12px; padding: 5px 8px; border-radius: 999px; background: color-mix(in oklab, var(--panel) 86%, transparent); border: 1px solid color-mix(in oklab, var(--text) 10%, transparent) }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-top: 1px solid color-mix(in oklab, var(--text) 10%, transparent); }
+    .link { padding: 8px 12px; border-radius: 10px; border: 1px solid color-mix(in oklab, var(--text) 14%, transparent); }
+
+    /* Footer */
+    footer { padding: 26px 0 60px; color: var(--muted); font-size: 14px; }
+
+    /* Dialog */
+    dialog { border: none; padding: 0; border-radius: calc(var(--radius) + 6px); overflow: hidden; box-shadow: var(--shadow); background: var(--panel); color: var(--text); width: min(720px, 94vw); }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid color-mix(in oklab, var(--text) 12%, transparent); }
+    .modal-body { padding: 16px; display: grid; gap: 10px; }
+    .close { background: transparent; border: 1px solid color-mix(in oklab, var(--text) 14%, transparent); border-radius: 10px; padding: 8px 10px; }
+
+    /* Utility */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .flex{display:flex}.items-center{align-items:center}.gap-8{gap:8px}
+  </style>
 </head>
 <body>
-
   <header>
-    <div class="container">
-      <h1 class="logo">JouwNaam</h1>
-      <nav>
-        <ul>
-          <li><a href="#over-mij">Over mij</a></li>
-          <li><a href="#projecten">Projecten</a></li>
-          <li><a href="#inkomsten">Inkomsten</a></li>
-        </ul>
-      </nav>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">JH</div>
+        <span>Jouw Portfolio</span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn" id="themeBtn" title="Schakel thema" aria-label="Schakel licht/donker thema">🌗 Thema</button>
+        <a class="btn btn-primary" id="contactBtn" href="#contact">Contact</a>
+      </div>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container">
-      <h2>Welkom op mijn centrale hub</h2>
-      <p>Ontdek mijn werk, projecten en hoe ik online inkomen genereer.</p>
-      <a href="#projecten" class="btn">Bekijk mijn werk</a>
-    </div>
-  </section>
-
-  <section id="over-mij" class="section">
-    <div class="container">
-      <h2>Over mij</h2>
-      <p>Ik ben een digitale maker, ondernemer en creatieve denker. Deze website is mijn centrale plek om alles te bundelen wat ik doe: van digitale producten tot slimme projecten en online verdienmodellen.</p>
-    </div>
-  </section>
-
-  <section id="projecten" class="section">
-    <div class="container">
-      <h2>Projecten & Portfolio</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Project 1</h3>
-          <p>Korte omschrijving van project of dienst.</p>
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>Codeerprojecten met impact</h1>
+          <p>Een strak, multifunctioneel portfolio. Zoek, filter en sorteer projecten; open details in een compacte modal. Klaar om uit te breiden.</p>
+          <div class="chip-row" aria-label="Stack">
+            <span class="chip">HTML</span>
+            <span class="chip">CSS</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">Accessibility</span>
+          </div>
         </div>
-        <div class="card">
-          <h3>Project 2</h3>
-          <p>Bijvoorbeeld een website, tool of campagne die je hebt gemaakt.</p>
-        </div>
-        <!-- Meer projecten kun je hier toevoegen -->
+        <aside class="hero-card" aria-label="Korte statistiek">
+          <div class="grid" style="gap:12px">
+            <div class="col-12">
+              <div class="field" role="search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/></svg>
+                <input id="search" type="search" placeholder="Zoek projecten op naam, tech of tags…" aria-label="Zoek projecten" />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="field">
+                <label class="sr-only" for="sort">Sorteer</label>
+                <select id="sort">
+                  <option value="recent">Sorteer: Meest recent</option>
+                  <option value="az">Sorteer: A → Z</option>
+                  <option value="stars">Sorteer: Sterren</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="field">
+                <label class="sr-only" for="filter">Filter</label>
+                <select id="filter">
+                  <option value="all">Alle categorieën</option>
+                  <option>Web</option>
+                  <option>Data</option>
+                  <option>Tooling</option>
+                  <option>Design</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat"><b id="stat-count">0</b><span>Projecten</span></div>
+            <div class="stat"><b id="stat-stars">0</b><span>Sterren</span></div>
+            <div class="stat"><b id="stat-year">—</b><span>Actief sinds</span></div>
+          </div>
+        </aside>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="inkomsten" class="section">
-    <div class="container">
-      <h2>Online inkomstenbronnen</h2>
-      <ul class="inkomstenlijst">
-        <li>🛒 Affiliate marketing – [Link]</li>
-        <li>📘 Digitale producten – [Link]</li>
-        <li>🎙️ Podcast / YouTube – [Link]</li>
-        <li>💼 Freelance werk – [Link]</li>
-      </ul>
-    </div>
-  </section>
+    <!-- Projects Grid -->
+    <section aria-labelledby="projectsTitle">
+      <h2 id="projectsTitle" class="sr-only">Projectoverzicht</h2>
+      <div id="grid" class="grid" style="margin-bottom: 24px"></div>
+    </section>
 
-  <footer>
-    <div class="container">
-      <p>© 2025 JouwNaam. Alle rechten voorbehouden.</p>
+    <!-- Contact -->
+    <section id="contact" class="hero-card" style="margin-top: 8px">
+      <h2 style="margin:0 0 8px">Contact</h2>
+      <p class="muted">Interesse of samenwerken? Mail naar <a href="mailto:mail@example.com">mail@example.com</a> of stuur een bericht via LinkedIn.</p>
+      <div class="chip-row">
+        <a class="link" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a class="link" href="#" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="link" href="#" target="_blank" rel="noreferrer">CV Download</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="flex items-center gap-8">
+      <span>© <span id="year"></span> Jouw Naam</span>
+      <span>·</span>
+      <a href="#" class="link">Privacy</a>
+      <a href="#" class="link">Impressum</a>
     </div>
   </footer>
 
+  <!-- Modal -->
+  <dialog id="modal">
+    <div class="modal-head">
+      <strong id="modalTitle">Titel</strong>
+      <button class="close" id="modalClose" aria-label="Sluit">Sluit</button>
+    </div>
+    <div class="modal-body">
+      <div class="thumb" id="modalThumb" style="aspect-ratio: 16/9; border-radius: 12px"></div>
+      <p id="modalDesc"></p>
+      <div class="tags" id="modalTags"></div>
+      <div class="chip-row" id="modalLinks"></div>
+    </div>
+  </dialog>
+
+  <script>
+    // --- Thema ---
+    const root = document.documentElement;
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'light') document.body.classList.add('theme-light');
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.body.classList.toggle('theme-light');
+      localStorage.setItem('theme', document.body.classList.contains('theme-light') ? 'light' : 'dark');
+    });
+
+    // --- Data: voeg je projecten hieronder toe ---
+    /** @typedef {{ id:string, title:string, description:string, category:'Web'|'Data'|'Tooling'|'Design', tech:string[], tags:string[], stars:number, year:number, cover?:string, links?:{label:string, href:string}[] }} Project */
+    /** @type {Project[]} */
+    const PROJECTS = [
+      {
+        id: 'p1',
+        title: 'UI Componentenkit',
+        description: 'Herbruikbare UI-componenten met toegankelijke varianten, gebouwd met HTML/CSS en vanilla JS.',
+        category: 'Web',
+        tech: ['HTML', 'CSS', 'JS'],
+        tags: ['design-system', 'accessibility'],
+        stars: 18,
+        year: 2025,
+        cover: '',
+        links: [
+          { label: 'Live demo', href: '#' },
+          { label: 'Broncode', href: '#' }
+        ]
+      },
+      {
+        id: 'p2',
+        title: 'Data Explorer',
+        description: 'Interactieve tabel met client-side filtering, sorteren en CSV-export.',
+        category: 'Data',
+        tech: ['JS'],
+        tags: ['table', 'export', 'csv'],
+        stars: 12,
+        year: 2024,
+        cover: '',
+        links: [ { label: 'Repo', href: '#' } ]
+      },
+      {
+        id: 'p3',
+        title: 'Build Tool CLI',
+        description: 'Minimalistische CLI voor project scaffolding met plug-in architectuur.',
+        category: 'Tooling',
+        tech: ['Node'],
+        tags: ['cli', 'scaffold'],
+        stars: 22,
+        year: 2023,
+        cover: '',
+        links: [ { label: 'NPM', href: '#' } ]
+      },
+      {
+        id: 'p4',
+        title: 'Typografie Poster Generator',
+        description: 'Canvas-gebaseerde poster generator; export naar PNG/PDF.',
+        category: 'Design',
+        tech: ['Canvas'],
+        tags: ['graphics', 'export'],
+        stars: 9,
+        year: 2022,
+        cover: '',
+        links: [ { label: 'Demo', href: '#' } ]
+      }
+    ];
+
+    // --- Rendering ---
+    const grid = document.getElementById('grid');
+    const statCount = document.getElementById('stat-count');
+    const statStars = document.getElementById('stat-stars');
+    const statYear = document.getElementById('stat-year');
+
+    const state = { q:'', sort:'recent', filter:'all' };
+
+    const formatThumb = (p) => {
+      if (p.cover) return `<img src="${p.cover}" alt="${p.title} afbeelding" class="thumb" loading="lazy">`;
+      const initials = p.title.split(' ').map(w=>w[0]).slice(0,3).join('').toUpperCase();
+      return `<div class="thumb" aria-hidden="true">${initials}</div>`;
+    };
+
+    function render() {
+      const q = state.q.toLowerCase();
+      const list = PROJECTS
+        .filter(p => state.filter === 'all' || p.category === state.filter)
+        .filter(p => !q || [p.title, p.description, p.category, ...(p.tech||[]), ...(p.tags||[])]
+          .join(' ').toLowerCase().includes(q))
+        .sort((a,b) => state.sort === 'az' ? a.title.localeCompare(b.title)
+              : state.sort === 'stars' ? b.stars - a.stars
+              : b.year - a.year);
+
+      statCount.textContent = String(list.length);
+      statStars.textContent = String(list.reduce((s,p)=>s+p.stars,0));
+      statYear.textContent = String(Math.min(...PROJECTS.map(p=>p.year)) || new Date().getFullYear());
+
+      grid.innerHTML = list.map(p => `
+        <article class="card col-4" data-id="${p.id}">
+          ${formatThumb(p)}
+          <div class="card-body">
+            <h3>${p.title}</h3>
+            <p>${p.description}</p>
+            <div class="tags">${[p.category, ...p.tech, ...p.tags].slice(0,6).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          </div>
+          <div class="card-footer">
+            <span aria-label="Sterren">⭐ ${p.stars}</span>
+            <a class="link" href="#" data-open="${p.id}">Bekijk</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // --- Interactie ---
+    document.getElementById('search').addEventListener('input', (e) => { state.q = e.target.value; render(); });
+    document.getElementById('sort').addEventListener('change', (e) => { state.sort = e.target.value; render(); });
+    document.getElementById('filter').addEventListener('change', (e) => { state.filter = e.target.value; render(); });
+
+    grid.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-open]');
+      if (!btn) return;
+      e.preventDefault();
+      const id = btn.getAttribute('data-open');
+      const p = PROJECTS.find(x=>x.id===id);
+      if (p) openModal(p);
+    });
+
+    // --- Modal ---
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalThumb = document.getElementById('modalThumb');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalTags = document.getElementById('modalTags');
+    const modalLinks = document.getElementById('modalLinks');
+
+    function openModal(p){
+      modalTitle.textContent = p.title;
+      modalThumb.innerHTML = formatThumb(p);
+      modalDesc.textContent = p.description;
+      modalTags.innerHTML = [p.category, ...p.tech, ...p.tags].map(t=>`<span class=tag>${t}</span>`).join(' ');
+      modalLinks.innerHTML = (p.links||[]).map(l=>`<a class="link" target="_blank" rel="noreferrer" href="${l.href}">${l.label}</a>`).join(' ');
+      modal.showModal();
+    }
+    document.getElementById('modalClose').addEventListener('click', ()=> modal.close());
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.close(); });
+
+    // --- Misc ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+    render();
+  </script>
 </body>
 </html>
