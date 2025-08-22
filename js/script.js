@@ -82,7 +82,7 @@
         tags: ['cli', 'scaffold'],
         stars: 22,
         year: 2023,
-        cover: 'images/thematicpic',
+        cover: 'images/logpic',
         links: [ { label: 'GITHUB', href: 'https://jenshoutje.github.io/houtjeinc/logboek.html' } ]
       },
     ];
