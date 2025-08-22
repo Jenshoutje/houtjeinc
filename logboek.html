@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Logboek – Houtje Inc.</title>
+
+  <!-- Gebruik je bestaande stylesheet -->
+  <link rel="stylesheet" href="/houtjeinc/style.css" />
+  <!-- Optioneel: favicon / fonts identiek aan je site -->
+</head>
+<body class="page page--logbook">
+
+  <!-- Topbar / header gelijk aan je site -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/houtjeinc/">Houtje Inc.</a>
+      <nav class="nav">
+        <a href="/houtjeinc/#">Projecten</a>
+        <a class="active" aria-current="page" href="/houtjeinc/logbook.html">Logboek</a>
+        <button id="themeToggle" class="btn btn--ghost" aria-label="Thema wisselen">Thema</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="headline">Logboek</h1>
+      <p class="subhead">Snel items vastleggen, automatisch gesorteerd op datum. Upload bestanden, voeg notities en tags toe, koppel aan projecten.</p>
+
+      <div class="panel panel--controls">
+        <div class="control control--search">
+          <span class="icon">🔎</span>
+          <input id="search" type="search" placeholder="Zoek in titel/notitie/tags…" aria-label="Zoeken" />
+        </div>
+
+        <div class="control control--select">
+          <label for="sort">Sorteer:</label>
+          <select id="sort">
+            <option value="new">Nieuwste eerst</option>
+            <option value="old">Oudste eerst</option>
+            <option value="az">A → Z</option>
+          </select>
+        </div>
+
+        <div class="control control--select">
+          <label for="filterType">Type:</label>
+          <select id="filterType">
+            <option value="all">Alle</option>
+            <option value="file">Bestand</option>
+            <option value="note">Notitie</option>
+            <option value="link">Link</option>
+          </select>
+        </div>
+
+        <div class="control control--select">
+          <label for="filterTag">Tag:</label>
+          <select id="filterTag">
+            <option value="">Alle tags</option>
+          </select>
+        </div>
+
+        <div class="control control--select">
+          <label for="filterProject">Project:</label>
+          <select id="filterProject">
+            <option value="">Alle projecten</option>
+          </select>
+        </div>
+
+        <div class="spacer"></div>
+
+        <button id="loginBtn" class="btn">Inloggen</button>
+        <button id="logoutBtn" class="btn btn--ghost" hidden>Uitloggen</button>
+        <button id="newEntryBtn" class="btn btn--primary" hidden>Nieuw item</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong id="statCount">0</strong><span>Items</span></div>
+        <div class="stat"><strong id="statFiles">0</strong><span>Bestanden</span></div>
+        <div class="stat"><strong id="statSince">—</strong><span>Actief sinds</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lijst -->
+  <main class="section">
+    <div class="container">
+      <!-- Datum-groepen komen hierbinnen -->
+      <div id="groups" class="groups"></div>
+
+      <!-- Leeg-staat -->
+      <div id="emptyState" class="empty" hidden>
+        <p>Nog geen items gevonden.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Upload/nieuw modal -->
+  <dialog id="entryDialog" class="dialog">
+    <form id="entryForm" method="dialog">
+      <header class="dialog__header">
+        <h2 id="dialogTitle">Nieuw log-item</h2>
+        <button type="button" class="icon-btn" id="closeDialog" aria-label="Sluiten">✕</button>
+      </header>
+
+      <div class="dialog__body">
+        <div class="field">
+          <label for="entryType">Type</label>
+          <select id="entryType" required>
+            <option value="file">Bestand</option>
+            <option value="note">Notitie</option>
+            <option value="link">Link</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="title">Titel</label>
+          <input id="title" type="text" placeholder="Titel (optioneel)" />
+        </div>
+
+        <div class="field" data-type="file">
+          <label for="fileInput">Bestand</label>
+          <input id="fileInput" type="file" />
+        </div>
+
+        <div class="field" data-type="link" hidden>
+          <label for="linkUrl">URL</label>
+          <input id="linkUrl" type="url" placeholder="https://…" />
+        </div>
+
+        <div class="field">
+          <label for="note">Notitie</label>
+          <textarea id="note" placeholder="Korte toelichting (markdown toegestaan)"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="tags">Tags</label>
+          <input id="tags" type="text" placeholder="comma,gescheiden,tags" />
+        </div>
+
+        <div class="field">
+          <label for="project">Project</label>
+          <select id="project">
+            <option value="">Geen</option>
+          </select>
+        </div>
+
+        <div class="field field--row">
+          <label class="checkbox">
+            <input id="visibility" type="checkbox" checked />
+            <span>Publiek zichtbaar</span>
+          </label>
+        </div>
+      </div>
+
+      <footer class="dialog__footer">
+        <button type="submit" class="btn btn--primary">Opslaan</button>
+        <button value="cancel" class="btn btn--ghost">Annuleer</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Minimal script loader, los JS-bestand -->
+  <script type="module" src="/houtjeinc/assets/logbook.js"></script>
+</body>
+</html>
