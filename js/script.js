@@ -74,7 +74,7 @@
         links: [ { label: 'GITHUB', href: 'https://jenshoutje.github.io/vragenlijst-triple-C/thematic-analysis.html' } ]
       },
       {
-        id: 'p5',
+        id: 'p6',
         title: 'Logboek',
         description: 'Bouwstenen voor fundamentele basis',
         category: 'Ongoing',
