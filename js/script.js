@@ -73,6 +73,18 @@
         cover: 'images/thematicpic',
         links: [ { label: 'GITHUB', href: 'https://jenshoutje.github.io/vragenlijst-triple-C/thematic-analysis.html' } ]
       },
+      {
+        id: 'p5',
+        title: 'Logboek',
+        description: 'Bouwstenen voor fundamentele basis',
+        category: 'Ongoing',
+        tech: ['Node'],
+        tags: ['cli', 'scaffold'],
+        stars: 22,
+        year: 2023,
+        cover: 'images/thematicpic',
+        links: [ { label: 'GITHUB', href: 'https://jenshoutje.github.io/houtjeinc/logboek.html' } ]
+      },
     ];
 
     // --- Rendering ---
